@@ -117,33 +117,35 @@ let monthDay d y =
             | true -> FindMonth d 1 1
     //failwith "Not implemented"
 
-let coord c1 c2 =
-    let x1,_ = c1
-    let _,y1 = c1
-    let x2,_ = c2
-    let _,y2 = c2
-    let brackets = ((x1-x2)**2.0 + (y1-y2)**2.0) //**raises to the power
-    
-    let sqrt n =
-        let rec calculate guess i =
-              match i with
-              | 10 -> guess
-              | _ ->
-                  let g = (guess + n/guess) / 2.0
-                  calculate g (i+1)
-        match n <= 0.0 with
-        | true -> failwith "Impossibru!"
-        | _ ->
-            calculate (n/2.0) 0
+               //float * float -> ((float * float -> float) * (float * float - > bool))
+let coord c =
+    let x1,y1 = c
+    let x2,y2 = c
+    let brackets = (((x1-x2)**2.0) , ((y1-y2)**2.0)) //this needs to be a tuple
 
-    let dist = sqrt brackets
+    let dist brackets = //this needs to take a tuple of f*f...
+        let c1,c2 = brackets
+        let n = c1 + c2
+        let sqrt n =
+            let rec calculate guess i =
+                  match i with
+                  | 10 -> guess
+                  | _ ->
+                      let g = (guess + n/guess) / 2.0
+                      calculate g (i+1)
+            match n <= 0.0 with
+            | true -> failwith "Impossibru!"
+            | _ ->
+                calculate (n/2.0) 0
+        sqrt n
+
     let topLeftC = (min x1 x2, max y1 y2)
-    //let isCorner = 
+    let within topLeftC =
+        match fst(topLeftC) >= x1 && snd(topLeftC) >= y1 with 
+        | true -> false
+        | _ -> true
 
-    match fst(topLeftC) >= x1 && snd(topLeftC) >= y1 with 
-    | true -> dist, false
-    | _ -> dist, true
-    //(dist, isCorner)        
+    (dist, within)        
 
 
 //failwith "Not implemented"

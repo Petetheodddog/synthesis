@@ -117,16 +117,19 @@ let monthDay d y =
             | true -> FindMonth d 1 1
     //failwith "Not implemented"
 
-               //float * float -> ((float * float -> float) * (float * float - > bool))
+              // float * float -> ((float * float -> float) * (float * float -> bool))
 let coord c =
+       // float * float -> 
     let x1,y1 = c
     let x2,y2 = c
     let brackets = (((x1-x2)**2.0) , ((y1-y2)**2.0)) //this needs to be a tuple
+    //brackets value is unused???
+    //maybe it should be...
 
-    let dist brackets = //this needs to take a tuple of f*f...
-        let c1,c2 = brackets
-        let n = c1 + c2
-        let sqrt n =
+    let dist brackets = //this needs to take a tuple of f*f... (float * float -> float)
+        let c1,c2 = brackets //how do I pass brackets here 
+        let n = c1 + c2 //this works right?
+        let sqrt n =    //this will work if everything else does
             let rec calculate guess i =
                   match i with
                   | 10 -> guess
@@ -140,12 +143,13 @@ let coord c =
         sqrt n
 
     let topLeftC = (min x1 x2, max y1 y2)
-    let within topLeftC =
+    let within topLeftC = //Also tuple input, (float * float -> bool)
         match fst(topLeftC) >= x1 && snd(topLeftC) >= y1 with 
         | true -> false
         | _ -> true
 
-    (dist, within)        
+    //closure
+    (dist, within)  // ((float * float -> float) * (float * float -> bool))
 
 
 //failwith "Not implemented"

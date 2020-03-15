@@ -120,15 +120,18 @@ let monthDay d y =
               // float * float -> ((float * float -> float) * (float * float -> bool))
 let coord c =
        // float * float -> 
-    let x1,y1 = c
-    let x2,y2 = c
-    let brackets = (((x1-x2)**2.0) , ((y1-y2)**2.0)) //this needs to be a tuple
-    //brackets value is unused???
-    //maybe it should be...
+    let brackets c1 c2 = 
+        let n1,_ = c1
+        let _,k1 = c1
+        let n2,_ = c2
+        let _,k2 = c2
+        let moo = (((n1-n2)**2.0) , ((k1-k2)**2.0)) 
+        (moo) 
 
-    let dist brackets = //this needs to take a tuple of f*f... (float * float -> float)
-        let c1,c2 = brackets //how do I pass brackets here 
-        let n = c1 + c2 //this works right?
+
+    let dist myCoord = //this needs to take a tuple of f*f... (float * float -> float)
+        let c1,c2 = brackets c myCoord
+        let n = c1 + c2 
         let sqrt n =    //this will work if everything else does
             let rec calculate guess i =
                   match i with
@@ -142,14 +145,21 @@ let coord c =
                 calculate (n/2.0) 0
         sqrt n
 
-    let topLeftC = (min x1 x2, max y1 y2)
-    let within topLeftC = //Also tuple input, (float * float -> bool)
-        match fst(topLeftC) >= x1 && snd(topLeftC) >= y1 with 
+    let topLeftC c1 c2 = 
+        let x1,y1 = c1
+        let x2,y2 = c2
+        (min x1 x2, max y1 y2)
+
+    let within myCoord = //Also tuple input, (float * float -> bool)
+        let c1,c2 = topLeftC c myCoord
+        //let c1,c2 = topLeftC c
+        let x1,y1 = c1
+        let x2,y2 = c2
+        //let n = c1 + c2 
+        //let x1,y1 = topLeftC
+        //match c1 >= x1 && c2 >= y2 with 
+        match fst(topLeftC c1 c2) >= x1 && snd(topLeftC c1 c2) >= y2 with 
         | true -> false
         | _ -> true
 
-    //closure
     (dist, within)  // ((float * float -> float) * (float * float -> bool))
-
-
-//failwith "Not implemented"

@@ -49,12 +49,22 @@ let digits a =
         |false -> cnt (j/10) (k+1) 
     cnt a 1
     //failwith "Not implemented"
+(*
+let rec digits a =
+        match a > -10 && a < 10 with 
+        |true -> 1
+        |false -> 1 + digits (a/10)
+*)
 
+let minmax (a,b,c,d) = 
+    min a b |> min c |> min d, max a b |> max c |> max d
+    //failwith "Not implemented"
+(*
 let minmax (a,b,c,d) = 
     let x = min (min a b) (min c d)
     let y = max (max a b) (max c d)
     (x,y)
-    //failwith "Not implemented"
+*)
 
 let isLeap a =
     match a < 1582 with
@@ -63,6 +73,12 @@ let isLeap a =
               |true -> (a%4 = 0) && (a%400 = 0)
               |false -> (a%4 = 0)
     //failwith "Not implemented"
+(*
+let isLeap a =
+    match a < 1582 with
+    |true -> failwith "Year less than 1582"
+    |false -> a%4 = 0 && (a % 100 <> 0 || a % 400 = 0)
+*)
 
 let month = function
     |1 -> ("January", 31)
@@ -78,7 +94,6 @@ let month = function
     |11 -> ("November", 30)
     |12 -> ("December", 31)
     |_ -> failwith "Invalid input"
-
     //failwith "Not implemented"
 
 let rec toBinary a =
@@ -88,7 +103,6 @@ let rec toBinary a =
                 | 0 | 1 -> string a 
                 |_ -> 
                     let bit = string (a%2) 
-
                     (toBinary (a/2)) + bit
     //failwith "Not implemented"
 
@@ -118,7 +132,25 @@ let monthDay d y =
     //failwith "Not implemented"
 
               // float * float -> ((float * float -> float) * (float * float -> bool))
-let coord c =
+let coord (x1,y1) =
+    let sqrt n =
+        let rec calculate guess i =
+              match i with
+              | 10 -> guess
+              | _ -> calculate((guess + n/guess)/2.0)(i+1)
+        calculate (n/2.0)0
+    let dist (x2,y2) = 
+        let d1,d2 = x1-x2, y1-y2
+        sqrt(d1*d1 + d2*d2)
+    let contains (tlX, tlY) w h =
+        (x1 > tlX && x1 < tlX+w) && (y1 < tlY && y1 < tlY+h)
+    dist, contains
+
+
+    
+
+(*
+    let coord c =
        // float * float -> 
     let brackets c1 c2 = 
         let n1,_ = c1
@@ -132,7 +164,7 @@ let coord c =
     let dist myCoord = //this needs to take a tuple of f*f... (float * float -> float)
         let c1,c2 = brackets c myCoord
         let n = c1 + c2 
-        let sqrt n =    //this will work if everything else does
+        let sqrt n = 
             let rec calculate guess i =
                   match i with
                   | 10 -> guess
@@ -163,3 +195,4 @@ let coord c =
         | _ -> true
 
     (dist, within)  // ((float * float -> float) * (float * float -> bool))
+*)
